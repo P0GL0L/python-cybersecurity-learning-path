@@ -14,6 +14,9 @@ This guide tells you:
 - When you are allowed to move forward
 
 ---
+> Looking for the project overview, learning stages, and NICE alignment? See the root `README.md`.
+
+---
 
 ## 1. What You Need Installed
 

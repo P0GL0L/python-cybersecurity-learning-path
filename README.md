@@ -15,6 +15,22 @@ This repository is designed for **learners**, **career-changers**, and **student
 - Built openly so others can learn, fork, and adapt
 
 ---
+## Start Here
+
+If you're new to this repository, start with the onboarding guide:
+
+- **Start here:** `docs/START_HERE.md` — prerequisites, setup, how to run each stage, and the commit/push rules.
+
+> Workflow rule: complete each stage, then **commit + push** before moving forward.
+
+---
+## Quick Links
+
+- Onboarding: `docs/START_HERE.md`
+- Stages: `stage-starters/`
+- Capstone: `capstone/`
+
+---
 
 ## 🧭 Learning Path Overview
 
