@@ -6,7 +6,7 @@ This repository is designed for **learners**, **career-changers**, and **student
 
 ---
 
-## 📌 What This Repository Is
+## What This Repository Is
 
 - A **beginner-to-capstone Python learning path**
 - Security concepts integrated from day one
@@ -15,6 +15,7 @@ This repository is designed for **learners**, **career-changers**, and **student
 - Built openly so others can learn, fork, and adapt
 
 ---
+
 ## Start Here
 
 If you're new to this repository, start with the onboarding guide:
@@ -24,11 +25,13 @@ If you're new to this repository, start with the onboarding guide:
 > Workflow rule: complete each stage, then **commit + push** before moving forward.
 
 ---
+
 ## Quick Links
 
 - Onboarding: `docs/START_HERE.md`
 - Stages: `stage-starters/`
 - Capstone: `capstone/`
+
 
 ---
 
