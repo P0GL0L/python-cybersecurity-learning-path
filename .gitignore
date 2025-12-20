@@ -4,3 +4,7 @@ stage-starters/stage_03/data/*.json
 # Python bytecode
 __pycache__/
 *.pyc
+# Stage 5 / Python build + runtime artifacts
+.cache/
+dist/
+*.egg-info/
