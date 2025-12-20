@@ -1,3 +1,6 @@
 # Stage 3 generated data
 stage-starters/stage_03/data/*.log
 stage-starters/stage_03/data/*.json
+# Python bytecode
+__pycache__/
+*.pyc
