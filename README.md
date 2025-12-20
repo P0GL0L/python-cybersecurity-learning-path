@@ -75,4 +75,20 @@ This repository aligns with the following NICE categories:
 ---
 
 ## 📁 Repository Structure
+- `docs/`
+  - `START_HERE.md` – Primary onboarding guide (prerequisites, setup, how to run, how to progress)
+- `stage-starters/`
+  - One folder per stage containing starter code, exercises, and acceptance checks
+  - Learner workflow: implement tasks → verify output → commit and push
+- `capstone/`
+  - Final Security Operations CLI Tool integrating RBAC, logging, persistence, and integrity checks
 
+---
+
+## 🚀 Getting Started
+
+1. Clone the repository
+2. Read `docs/START_HERE.md`
+3. Begin with Stage 1 in `stage-starters/`
+4. After completing each stage, commit and push your work before proceeding
+5. Complete the capstone project in `capstone/`
