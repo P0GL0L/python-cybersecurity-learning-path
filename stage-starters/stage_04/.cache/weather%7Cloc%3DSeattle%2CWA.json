@@ -1,0 +1,16 @@
+{
+  "_cached_at": 1766251957,
+  "data": {
+    "source": "weather",
+    "location_input": "Seattle,WA",
+    "location_resolved": "Seattle, King County, Washington, United States",
+    "latitude": 47.6038321,
+    "longitude": -122.330062,
+    "current": {
+      "time": "2025-12-20T09:30",
+      "temperature_2m": 5.7,
+      "relative_humidity_2m": 86,
+      "wind_speed_10m": 16.2
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "_cached_at": 1766251370,
+  "data": {
+    "source": "weather",
+    "location_input": "Seattle",
+    "location_resolved": "Seattle, United States",
+    "latitude": 47.60621,
+    "longitude": -122.33207,
+    "current": {
+      "time": "2025-12-20T09:15",
+      "temperature_2m": 4.9,
+      "relative_humidity_2m": 86,
+      "wind_speed_10m": 16.7
+    }
+  }
+}

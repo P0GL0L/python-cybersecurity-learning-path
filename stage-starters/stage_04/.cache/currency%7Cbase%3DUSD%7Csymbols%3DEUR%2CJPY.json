@@ -1,0 +1,16 @@
+{
+  "_cached_at": 1766252103,
+  "data": {
+    "source": "currency",
+    "base": "USD",
+    "symbols": [
+      "EUR",
+      "JPY"
+    ],
+    "date": "2025-12-19",
+    "rates": {
+      "EUR": 0.85383,
+      "JPY": 157.23
+    }
+  }
+}
