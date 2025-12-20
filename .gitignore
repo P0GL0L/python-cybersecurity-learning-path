@@ -10,4 +10,7 @@ dist/
 *.egg-info/
 START_HERE.old
 *.old
+# pytest
+.pytest_cache/
+**/.pytest_cache/
 
