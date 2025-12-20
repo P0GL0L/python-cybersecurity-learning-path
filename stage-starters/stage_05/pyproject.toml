@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,5 +10,12 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+stage5-tool = "app.main:main"
+
 [tool.setuptools.packages.find]
-where = ["app"]
+where = ["."]
+include = ["app*"]
