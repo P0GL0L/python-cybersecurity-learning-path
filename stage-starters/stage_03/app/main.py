@@ -3,6 +3,8 @@ import json
 import logging
 import re
 import sys
+import shutil
+from typing import Iterable
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
@@ -75,22 +77,10 @@ def setup_logging(verbose: bool, log_file: Optional[Path]) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        prog="stage3-log-analyzer",
-        description="Stage 3 - Log Analyzer: parse logs and export a JSON summary report",
+        prog="stage3",
+        description="Stage 3 - Files, Automation, and Robust CLI Programs",
     )
 
-    parser.add_argument(
-        "--input",
-        type=Path,
-        required=True,
-        help="Path to the input log file to analyze",
-    )
-    parser.add_argument(
-        "--output",
-        type=Path,
-        required=True,
-        help="Path to write the JSON report (directories will be created if needed)",
-    )
     parser.add_argument(
         "--verbose",
         action="store_true",
@@ -100,16 +90,51 @@ def parse_args() -> argparse.Namespace:
         "--log-file",
         type=Path,
         default=None,
-        help="Optional path to write a rotating debug log (example: stage-starters/stage_03/data/run.log)",
+        help="Optional path to a rotating debug log file",
     )
-    parser.add_argument(
+
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # -------- analyze (Log Analyzer) --------
+    analyze_p = subparsers.add_parser(
+        "analyze",
+        help="Analyze a log file and export a JSON summary report",
+    )
+    analyze_p.add_argument("--input", type=Path, required=True, help="Path to the input log file")
+    analyze_p.add_argument("--output", type=Path, required=True, help="Path to write the JSON report")
+    analyze_p.add_argument(
         "--top",
         type=int,
         default=10,
-        help="Number of top message patterns to include in the report (default: 10)",
+        help="Number of top message patterns to include (default: 10)",
+    )
+
+    # -------- backup (Backup/Sync helper) --------
+    backup_p = subparsers.add_parser(
+        "backup",
+        help="Copy files by pattern from source to destination (supports dry-run)",
+    )
+    backup_p.add_argument("--source", type=Path, required=True, help="Source directory to search")
+    backup_p.add_argument("--dest", type=Path, required=True, help="Destination directory for copied files")
+    backup_p.add_argument(
+        "--pattern",
+        type=str,
+        required=True,
+        help='Glob pattern to match files (example: "*.log" or "*.txt")',
+    )
+    backup_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be copied without copying any files",
+    )
+    backup_p.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite destination files if they already exist",
     )
 
     return parser.parse_args()
+
 
 
 def normalize_message(msg: str) -> str:
@@ -245,38 +270,139 @@ def main() -> int:
     args = parse_args()
     setup_logging(args.verbose, args.log_file)
 
-    logging.info("Stage 3 Log Analyzer starting.")
-    logging.info("Input:  %s", args.input)
-    logging.info("Output: %s", args.output)
+    # ---------- analyze ----------
+    if args.command == "analyze":
+        logging.info("Stage 3 Log Analyzer starting.")
+        logging.info("Input:  %s", args.input)
+        logging.info("Output: %s", args.output)
 
-    # Validate input/output early with meaningful exit codes
-    input_error = validate_input_file(args.input)
-    if input_error:
-        logging.error(input_error)
-        return EXIT_INPUT_ERROR
+        input_error = validate_input_file(args.input)
+        if input_error:
+            logging.error(input_error)
+            return EXIT_INPUT_ERROR
 
-    output_error = validate_output_path(args.output)
-    if output_error:
-        logging.error(output_error)
-        return EXIT_OUTPUT_ERROR
+        output_error = validate_output_path(args.output)
+        if output_error:
+            logging.error(output_error)
+            return EXIT_OUTPUT_ERROR
 
-    try:
-        report = analyze_log(args.input, args.top)
-        write_json_report(args.output, report)
-    except Exception as e:
-        logging.exception("Fatal error while analyzing logs: %s", e)
-        return EXIT_FATAL_PARSE
+        try:
+            report = analyze_log(args.input, args.top)
+            write_json_report(args.output, report)
+        except Exception as e:
+            logging.exception("Fatal error while analyzing logs: %s", e)
+            return EXIT_FATAL_PARSE
 
-    logging.info("Report written to: %s", args.output)
-    logging.info(
-        "Lines: total=%d parsed=%d malformed=%d",
-        report["summary"]["total_lines"],
-        report["summary"]["parsed_lines"],
-        report["summary"]["malformed_lines"],
-    )
-    logging.info("Stage 3 Log Analyzer complete.")
-    return EXIT_OK
+        logging.info("Report written to: %s", args.output)
+        logging.info(
+            "Lines: total=%d parsed=%d malformed=%d",
+            report["summary"]["total_lines"],
+            report["summary"]["parsed_lines"],
+            report["summary"]["malformed_lines"],
+        )
+        logging.info("Stage 3 Log Analyzer complete.")
+        return EXIT_OK
+
+    # ---------- backup ----------
+    if args.command == "backup":
+        logging.info("Stage 3 Backup/Sync helper starting.")
+        logging.info("Source:   %s", args.source)
+        logging.info("Dest:     %s", args.dest)
+        logging.info("Pattern:  %s", args.pattern)
+        logging.info("Dry-run:  %s", args.dry_run)
+        logging.info("Overwrite:%s", args.overwrite)
+
+        return run_backup(
+            source=args.source,
+            dest=args.dest,
+            pattern=args.pattern,
+            dry_run=args.dry_run,
+            overwrite=args.overwrite,
+        )
+
+    logging.error("Unknown command: %s", args.command)
+    return EXIT_USAGE
+
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+def write_json_report(output_path: Path, report: dict) -> None:
+    def iter_matching_files(source_dir: Path, pattern: str) -> Iterable[Path]:
+        """
+        Yield all files under source_dir that match the glob pattern.
+        Uses rglob for recursive search.
+        """
+    yield from (p for p in source_dir.rglob(pattern) if p.is_file())
+
+
+def copy_with_structure(
+    source_file: Path,
+    source_root: Path,
+    dest_root: Path,
+    overwrite: bool,
+) -> Path:
+    """
+    Copy source_file into dest_root, preserving the relative folder structure.
+    """
+    rel = source_file.relative_to(source_root)
+    dest_path = dest_root / rel
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if dest_path.exists() and not overwrite:
+        raise FileExistsError(f"Destination exists (use --overwrite): {dest_path}")
+
+    shutil.copy2(source_file, dest_path)
+    return dest_path
+
+
+def run_backup(source: Path, dest: Path, pattern: str, dry_run: bool, overwrite: bool) -> int:
+    # Validate source
+    if not source.exists():
+        logging.error("Source directory does not exist: %s", source)
+        return EXIT_INPUT_ERROR
+    if not source.is_dir():
+        logging.error("Source path is not a directory: %s", source)
+        return EXIT_INPUT_ERROR
+
+    # Validate dest (create if needed)
+    try:
+        dest.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        logging.error("Could not create destination directory: %s (%s)", dest, e)
+        return EXIT_OUTPUT_ERROR
+
+    matches = list(iter_matching_files(source, pattern))
+    logging.info("Matched %d file(s) using pattern %r under %s", len(matches), pattern, source)
+
+    copied = 0
+    skipped = 0
+    errors = 0
+
+    for src in matches:
+        try:
+            rel = src.relative_to(source)
+            planned_dest = dest / rel
+
+            if planned_dest.exists() and not overwrite:
+                logging.warning("SKIP (exists): %s", planned_dest)
+                skipped += 1
+                continue
+
+            if dry_run:
+                logging.info("DRY-RUN copy: %s -> %s", src, planned_dest)
+                copied += 1
+                continue
+
+            out_path = copy_with_structure(src, source, dest, overwrite=overwrite)
+            logging.info("COPIED: %s -> %s", src, out_path)
+            copied += 1
+
+        except Exception as e:
+            logging.error("ERROR copying %s: %s", src, e)
+            errors += 1
+
+    logging.info("Backup summary: planned/copied=%d skipped=%d errors=%d", copied, skipped, errors)
+    return EXIT_OK if errors == 0 else EXIT_FATAL_PARSE
+
