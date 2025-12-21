@@ -1,0 +1,150 @@
+# Python for Cybersecurity Learning Path
+# Requirements file for all stages
+
+# ============================================================================
+# CORE DEPENDENCIES (All Stages)
+# ============================================================================
+
+# HTTP Requests and Web Scraping
+requests>=2.31.0
+urllib3>=2.1.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Data Processing
+pandas>=2.1.0
+numpy>=1.24.0
+
+# File and Data Handling
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+# ============================================================================
+# STAGE 03: Security Fundamentals
+# ============================================================================
+
+# Cryptography
+cryptography>=41.0.0
+pycryptodome>=3.19.0
+
+# Password and Hash Utilities
+bcrypt>=4.1.0
+passlib>=1.7.4
+
+# ============================================================================
+# STAGE 04: Network Security
+# ============================================================================
+
+# Network Packet Manipulation
+scapy>=2.5.0
+
+# Network Analysis
+python-nmap>=0.7.1
+netifaces>=0.11.0
+
+# Asynchronous I/O
+aiohttp>=3.9.0
+
+# DNS
+dnspython>=2.4.0
+
+# ============================================================================
+# STAGE 05: Web Security
+# ============================================================================
+
+# Web Automation and Testing
+selenium>=4.15.0
+playwright>=1.40.0
+
+# HTTP Client Libraries
+httpx>=0.25.0
+
+# URL and HTML Processing
+html5lib>=1.1
+
+# ============================================================================
+# STAGE 06: Advanced Security
+# ============================================================================
+
+# Malware Analysis
+yara-python>=4.3.0
+pefile>=2023.2.7
+
+# Threat Intelligence
+shodan>=1.30.0
+virustotal-api>=1.1.11
+
+# Network Traffic Analysis
+pyshark>=0.6
+
+# ============================================================================
+# UTILITIES AND HELPERS
+# ============================================================================
+
+# Command Line Interface
+click>=8.1.0
+colorama>=0.4.6
+rich>=13.7.0
+
+# Progress Bars
+tqdm>=4.66.0
+
+# Configuration
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+
+# Logging
+loguru>=0.7.0
+
+# ============================================================================
+# TESTING AND QUALITY
+# ============================================================================
+
+# Testing Framework
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+
+# Code Quality
+pylint>=3.0.0
+black>=23.11.0
+flake8>=6.1.0
+mypy>=1.7.0
+
+# Security Linting
+bandit>=1.7.5
+
+# ============================================================================
+# DOCUMENTATION
+# ============================================================================
+
+# Documentation Generation
+sphinx>=7.2.0
+sphinx-rtd-theme>=2.0.0
+
+# ============================================================================
+# DEVELOPMENT TOOLS
+# ============================================================================
+
+# IPython for interactive development
+ipython>=8.18.0
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+# Installation:
+#   pip install -r requirements.txt
+
+# For development (includes testing tools):
+#   pip install -r requirements.txt -r requirements-dev.txt
+
+# Platform-specific notes:
+#   - Scapy may require additional setup on Windows
+#   - Some packages may need compilation (gcc, python-dev)
+#   - See TROUBLESHOOTING.md for platform-specific issues
+
+# Version pinning:
+#   - Versions use >= to allow minor updates
+#   - For production, consider using == for exact versions
+#   - Generate exact versions: pip freeze > requirements-lock.txt

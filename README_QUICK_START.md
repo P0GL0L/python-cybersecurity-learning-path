@@ -1,10 +1,113 @@
 > Short on time? See `README_QUICK_START.md` for the fastest way to begin.
 
-# Quick Start – Python Cybersecurity Learning Path
+# Quick Start — Python Cybersecurity Learning Path
 
 This is the **fastest way to begin** using this repository.
 
 If you only read one file before starting, read this one.
+
+---
+
+## 🚀 Try It Right Now (5 Minutes)
+
+**Want to see what you'll build?** Run your first security tool before even cloning the repo:
+
+### Your First Security Script: Password Strength Checker
+
+Create a file called `password_checker.py`:
+```python
+import re
+import getpass
+
+def check_password_strength(password):
+    """Check password strength and return score (0-100)."""
+    score = 0
+    feedback = []
+    
+    # Length check
+    length = len(password)
+    if length >= 12:
+        score += 25
+    elif length >= 8:
+        score += 15
+        feedback.append("Consider using 12+ characters")
+    else:
+        feedback.append("Password too short! Use at least 12 characters")
+    
+    # Character variety checks
+    if re.search(r'[a-z]', password):
+        score += 15
+    else:
+        feedback.append("Add lowercase letters")
+    
+    if re.search(r'[A-Z]', password):
+        score += 15
+    else:
+        feedback.append("Add uppercase letters")
+    
+    if re.search(r'\d', password):
+        score += 15
+    else:
+        feedback.append("Add numbers")
+    
+    if re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        score += 20
+    else:
+        feedback.append("Add special characters")
+    
+    # Determine strength
+    if score >= 80:
+        strength = "STRONG 💪"
+    elif score >= 60:
+        strength = "MODERATE ⚠️"
+    else:
+        strength = "WEAK ❌"
+    
+    return score, strength, feedback
+
+# Main program
+print("=" * 50)
+print("PASSWORD STRENGTH CHECKER")
+print("=" * 50)
+print("\nYour password is not stored or transmitted.\n")
+
+password = getpass.getpass("Enter password to check: ")
+
+score, strength, feedback = check_password_strength(password)
+
+print(f"\n{'=' * 50}")
+print(f"Strength: {strength}")
+print(f"Score: {score}/100")
+print(f"{'=' * 50}")
+
+if feedback:
+    print("\n💡 Improvement suggestions:")
+    for tip in feedback:
+        print(f"   • {tip}")
+else:
+    print("\n✅ Excellent password!")
+
+print(f"\n{'=' * 50}")
+```
+
+**Run it:**
+```bash
+python password_checker.py
+```
+
+**What you just built:**
+- ✅ Secure password input (no echo to screen)
+- ✅ Pattern matching with regex
+- ✅ Security best practices
+- ✅ User-friendly output
+
+**This is what you'll learn in Stage 01!**
+
+---
+
+## 📚 Ready for the Full Learning Path?
+
+Continue below for the complete structured approach...
 
 ---
 
@@ -22,7 +125,6 @@ python --version
 ---
 
 ## 2) Clone the Repository
-
 ```bash
 git clone https://github.com/P0GL0L/python-cybersecurity-learning-path.git
 cd python-cybersecurity-learning-path
@@ -33,7 +135,6 @@ cd python-cybersecurity-learning-path
 ## 3) Read the Onboarding Rules (Required)
 
 Before writing any code, read:
-
 ```
 docs/START_HERE.md
 ```
@@ -50,7 +151,6 @@ Skipping this causes confusion later.
 ## 4) Begin the Learning Path
 
 Start with **Stage 01**:
-
 ```
 stage-starters/stage_01
 ```
@@ -87,7 +187,6 @@ Then move to the next stage.
 ## 6) Track Your Progress
 
 Use the checklist:
-
 ```
 docs/LEARNER_PROGRESS_CHECKLIST.md
 ```
@@ -99,7 +198,6 @@ If an item is not checked, the stage is not done.
 ## 7) Final Integration (Capstone)
 
 After completing all stages:
-
 ```
 capstone/
 ```
@@ -111,7 +209,6 @@ This is where earlier skills are integrated into a final, review-ready tool.
 ## 8) Choose Documentation Based on Your Goal
 
 When finished, see:
-
 ```
 audience-docs/
 ```
@@ -123,7 +220,7 @@ audience-docs/
 
 ---
 
-## You’re Ready
+## You're Ready
 
 If you:
 - follow stages in order
