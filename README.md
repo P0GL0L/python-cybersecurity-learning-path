@@ -6,6 +6,23 @@ This repository is designed for **learners**, **career-changers**, and **student
 
 ---
 
+## 🚦 Start Here (Read This First)
+
+Choose the path that matches your goal:
+
+- **New learner:**  
+  Start with `docs/START_HERE.md` for setup, workflow rules, and how to progress
+
+- **Track progress:**  
+  Use `docs/LEARNER_PROGRESS_CHECKLIST.md` to verify stage completion
+
+- **Interview / portfolio / academic review:**  
+  See `audience-docs/` for audience-specific documentation
+
+> **Workflow rule:** Complete each stage, then **commit + push** before moving forward.
+
+---
+
 ## What This Repository Is
 
 - A **beginner-to-capstone Python learning path**
@@ -16,76 +33,62 @@ This repository is designed for **learners**, **career-changers**, and **student
 
 ---
 
-## Start Here
+## 📁 Repository Structure
 
-If you're new to this repository, start with the onboarding guide:
-
-- **Start here:** `docs/START_HERE.md` — prerequisites, setup, how to run each stage, and the commit/push rules.
-
-> Workflow rule: complete each stage, then **commit + push** before moving forward.
-
----
-
-## Quick Links
-
-- Onboarding: `docs/START_HERE.md`
-- Stages: `stage-starters/`
-- Capstone: `capstone/`
-
+- `docs/`
+  - `START_HERE.md` – onboarding, setup, workflow rules
+  - `LEARNER_PROGRESS_CHECKLIST.md` – stage completion checklist
+- `stage-starters/`
+  - Stages **01–06**, each focused on a specific skill boundary
+- `capstone/`
+  - Final integration project demonstrating applied skills
+- `audience-docs/`
+  - Learner, employer, instructor, and interview documentation
 
 ---
 
 ## 🧭 Learning Path Overview
 
-### Stage 1: Python Foundations
+### Stage 01 – Python Foundations
 - Variables, input/output, conditionals, loops
 - Secure input handling
-- Login attempt simulation
+- CLI structure and workflow discipline
 
-### Stage 2: Core Programming & Data Handling
+### Stage 02 – Core Programming & Data Handling
 - Functions and scope
 - Dictionaries, lists, and sets
-- Role-based access control (RBAC)
-- Log analysis basics
+- Menu-driven CLI behavior
 
-### Stage 3: File Handling, Logging, and Hashing
+### Stage 03 – File Handling and Automation
 - Safe file I/O
-- JSON persistence
-- Audit logging
-- SHA-256 integrity checks
+- CLI flags and predictable behavior
+- Error handling and exit states
 
-### Stage 4: Object-Oriented Programming
-- Classes and encapsulation
-- Policy engines
-- Centralized audit logging
-- Modular security tools
+### Stage 04 – APIs and Data Integration
+- External API usage with timeouts
+- Environment variables for secrets
+- Caching and data reuse
 
-### Stage 5: Automation & System Interaction
-- Command-line arguments
-- Regular expressions
-- System and network interaction
-- API consumption
+### Stage 05 – Testing, Packaging, and CI
+- Unit testing with mocking
+- Packaging with `pyproject.toml`
+- Continuous integration workflows
 
-### Stage 6: Secure Software Development & Testing
-- Input validation and sanitization
-- Secure authentication patterns
-- Password hashing
-- Safe exception handling
-- Unit testing for security logic
+### Stage 06 – Portfolio-Ready CLI Tool
+- Integrated functionality
+- Tests and documentation
+- Explainable design decisions
 
-### Stage 7: Capstone Project
-- Security Operations CLI Tool
-- Role-based access control
-- JSON persistence
-- Audit logging (UTC)
-- File integrity verification
-- CLI automation
+### Capstone – Final Integration Project
+- End-to-end CLI automation tool
+- Secure data handling
+- Portfolio-ready presentation
 
 ---
 
 ## 🧠 NICE Cybersecurity Workforce Framework Alignment
 
-This repository aligns with the following NICE categories:
+This repository aligns with:
 
 - **Securely Provision (SP-DEV)** – Secure software development
 - **Protect and Defend (PR-CDA)** – Log analysis and detection
@@ -93,26 +96,20 @@ This repository aligns with the following NICE categories:
 
 ---
 
-## 📁 Repository Structure
-- `docs/`
-  - `START_HERE.md` – Primary onboarding guide (prerequisites, setup, how to run, how to progress)
-- `stage-starters/`
-  - One folder per stage containing starter code, exercises, and acceptance checks
-  - Learner workflow: implement tasks → verify output → commit and push
-- `capstone/`
-  - Final Security Operations CLI Tool integrating RBAC, logging, persistence, and integrity checks
-
----
-
 ## 🚀 Getting Started
 
 1. Clone the repository
 2. Read `docs/START_HERE.md`
-3. Begin with Stage 1 in `stage-starters/`
-4. After completing each stage, commit and push your work before proceeding
-5. Complete the capstone project in `capstone/`
+3. Begin with `stage-starters/stage_01`
+4. Commit and push after each stage
+5. Complete the capstone in `capstone/`
 
+---
 
-## Audience-Specific Docs
+## Audience-Specific Documentation
 
-See `audience-docs/` for employer, capstone, interview, and instructor-focused documentation.
+See `audience-docs/` for:
+- learner guidance
+- interview talking points
+- employer-facing overview
+- instructor evaluation notes
