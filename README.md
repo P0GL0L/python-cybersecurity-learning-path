@@ -1,5 +1,20 @@
 # Python Cybersecurity Learning Path
 
+# Python for Cybersecurity Learning Path
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
+[![GitHub Stars](https://img.shields.io/github/stars/YOUR-USERNAME/YOUR-REPO-NAME?style=social)](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/YOUR-USERNAME/YOUR-REPO-NAME?style=social)](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME/network/members)
+[![Issues](https://img.shields.io/github/issues/YOUR-USERNAME/YOUR-REPO-NAME)](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME/blob/main/CONTRIBUTING.md)
+[![Last Commit](https://img.shields.io/github/last-commit/YOUR-USERNAME/YOUR-REPO-NAME)](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME/commits/main)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-blue)](https://YOUR-USERNAME.github.io/YOUR-REPO-NAME)
+[![NICE Framework](https://img.shields.io/badge/NICE-Framework%20Aligned-purple)](https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center)
+[![Contributions](https://img.shields.io/badge/contributions-welcome-orange.svg)](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME/blob/main/CONTRIBUTING.md)
+
+> 🎯 A comprehensive, structured learning path from Python fundamentals to professional security automation • Aligned with NICE Cybersecurity Workforce Framework • 200+ hours of hands-on content
+
 A step-by-step Python learning path for cybersecurity, guiding beginners through secure software development, automation, logging, integrity checks, and a final capstone project.
 
 This repository is designed for **learners**, **career-changers**, and **students** who want to learn Python with a real-world cybersecurity focus.
