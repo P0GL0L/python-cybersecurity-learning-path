@@ -129,3 +129,8 @@ Ask “why,” not just “how.”
 Use the documentation as part of the learning.
 
 When you’re done, this repository should tell a clear story — even if you’re not in the room to explain it.
+
+## Continue Learning
+
+- Start or resume: `docs/START_HERE.md`
+- Track progress: `docs/LEARNER_PROGRESS_CHECKLIST.md`

@@ -97,3 +97,9 @@ After completing and committing Stage 02:
 - Proceed to `stage-starters/stage_03`
 - Continue following the same workflow discipline
 - Build toward file handling, logging, and automation
+
+## What’s Next
+
+Proceed to `stage-starters/stage_0X+1`
+
+Do not continue until this stage is committed and pushed.

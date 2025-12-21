@@ -5,6 +5,11 @@ This document explains **how to evaluate, review, and present** this repository.
 It is intended for instructors, reviewers, and employers who want to understand the structure, rigor, and intent of the project.
 
 ---
+## Instructor Quick Entry
+
+For the instructor-facing evaluation overview, start here:
+- `audience-docs/instructor_notes.md`
+---
 
 ## Purpose of This Repository
 

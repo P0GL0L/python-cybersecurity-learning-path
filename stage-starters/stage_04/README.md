@@ -185,3 +185,9 @@ After completing and committing Stage 04:
 - Proceed to `stage-starters/stage_05`
 - Focus on testing, packaging, and CI
 - Treat this stage as the transition from scripting to production-quality tooling
+
+## What’s Next
+
+Proceed to `stage-starters/stage_0X+1`
+
+Do not continue until this stage is committed and pushed.

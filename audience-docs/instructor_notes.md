@@ -6,6 +6,11 @@ This document is intended for **instructors, evaluators, and reviewers** who are
 It explains **how the repository is meant to be evaluated**, what signals to look for, and what successful completion looks like.
 
 ---
+## Related Instructor Document
+
+For expanded portfolio and evaluation guidance, see:
+- `docs/INSTRUCTOR_PORTFOLIO_NOTES.md`
+---
 
 ## Repository Intent
 
@@ -148,3 +153,8 @@ Learners should be able to explain:
 - what they would improve next
 
 The ability to explain decisions is as important as the code itself.
+
+## Navigation
+
+- Learner checklist: `docs/LEARNER_PROGRESS_CHECKLIST.md`
+- Repository overview: `README.md`

@@ -115,3 +115,9 @@ After completing and committing Stage 03:
 - Proceed to `stage-starters/stage_04`
 - Add networking best practices (timeouts, caching, clean failures)
 - Continue treating your tooling like production code
+
+## What’s Next
+
+Proceed to `stage-starters/stage_0X+1`
+
+Do not continue until this stage is committed and pushed.

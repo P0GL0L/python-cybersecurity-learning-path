@@ -141,3 +141,10 @@ By checking every item above, you certify that:
 
 **Signature (optional):** ________________________  
 **Date:** ________________________
+
+
+## Navigation
+
+- Start here: `docs/START_HERE.md`
+- First stage: `stage-starters/stage_01`
+- After Stage 06: see `audience-docs/README.md`

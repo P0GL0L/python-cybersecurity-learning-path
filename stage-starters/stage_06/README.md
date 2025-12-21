@@ -141,3 +141,12 @@ After completing and committing Stage 06:
 - Review the final `capstone/` project (if applicable)
 - Ensure your repository tells a clear story for instructors and employers
 - Use this stage as a portfolio reference
+
+## What’s Next
+
+Choose documentation based on your goal:
+
+- Learning review: `docs/LEARNER_PROGRESS_CHECKLIST.md`
+- Interview prep: `audience-docs/interview_talking_points.md`
+- Employer review: `audience-docs/employer_README.md`
+- Academic evaluation: `audience-docs/instructor_notes.md`

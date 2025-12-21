@@ -219,7 +219,17 @@ This repository is designed to build real cybersecurity-focused development habi
 - Defensive thinking from the start
 If something feels strict, that is intentional.
 
+## What to Read Next
 
+- Begin with `stage-starters/stage_01`
+- Track progress using `docs/LEARNER_PROGRESS_CHECKLIST.md`
+- Return to the root `README.md` for overall context
+
+## What’s Next
+
+Proceed to `stage-starters/stage_0X+1`
+
+Do not continue until this stage is committed and pushed.
 
 
 

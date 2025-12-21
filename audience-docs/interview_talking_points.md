@@ -91,3 +91,9 @@ If possible, **open the repository** during the interview and:
 - explain one decision you changed later
 
 Being able to **walk someone through your thinking** matters more than any single feature.
+
+## Related Docs
+
+- Repository overview: `README.md`
+- Employer context: `employer_README.md`
+- Stage evidence: `stage-starters/`

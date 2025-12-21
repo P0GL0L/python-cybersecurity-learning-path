@@ -135,3 +135,9 @@ After completing and committing Stage 05:
 - Proceed to `stage-starters/stage_06`
 - Apply the same quality and workflow standards
 - Prepare for a portfolio-ready release
+
+## What’s Next
+
+Proceed to `stage-starters/stage_0X+1`
+
+Do not continue until this stage is committed and pushed.

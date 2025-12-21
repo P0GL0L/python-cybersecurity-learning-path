@@ -69,3 +69,8 @@ All stages are complete, documented, and committed using a disciplined Git workf
 ## License
 
 Educational / portfolio use.
+
+## Next Steps for Reviewers
+
+- See stage progression: `stage-starters/`
+- Evaluation notes: `audience-docs/instructor_notes.md`
