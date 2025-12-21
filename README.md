@@ -111,3 +111,9 @@ This repository aligns with the following NICE categories:
 3. Begin with Stage 1 in `stage-starters/`
 4. After completing each stage, commit and push your work before proceeding
 5. Complete the capstone project in `capstone/`
+
+
+### Alternate README Options
+
+- Employer-facing overview: `employer_README.md`
+- Capstone-focused overview: `capstone_README.md`
