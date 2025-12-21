@@ -113,3 +113,42 @@ See `audience-docs/` for:
 - interview talking points
 - employer-facing overview
 - instructor evaluation notes
+
+## How to Run
+
+### Option A — Use a Virtual Environment (recommended)
+**Windows (PowerShell)**
+```powershell
+git clone https://github.com/P0GL0L/python-cybersecurity-learning-path.git
+cd python-cybersecurity-learning-path
+
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+```
+
+Then run a stage script from its directory, for example:
+python path/to/script.py
+
+### Option B — Run Without a Virtual Environment (not recommended)
+
+If you choose not to use a venv, ensure you have Python 3 installed and use python (or python3) directly:
+
+python path/to/script.py
+
+### Note: Some stages may introduce dependencies later. Option A avoids system-level package conflicts.
+
+
+If you already have specific stage entrypoints (like `stage-starters/stage-1/...`), tell me the exact path(s) and I’ll tailor the commands so they are 1:1 with your repo layout.
+
+---
+
+## 4) Exact Git commands to add everything
+
+From repo root:
+
+```bash
+git add LICENSE .gitignore CONTRIBUTING.md SECURITY.md README.md
+git commit -m "Add repo hygiene files (license, ignore, contributing, security) and pin How to Run"
+git push
