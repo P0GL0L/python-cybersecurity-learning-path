@@ -113,7 +113,6 @@ This repository aligns with the following NICE categories:
 5. Complete the capstone project in `capstone/`
 
 
-### Alternate README Options
+## Audience-Specific Docs
 
-- Employer-facing overview: `employer_README.md`
-- Capstone-focused overview: `capstone_README.md`
+See `audience-docs/` for employer, capstone, interview, and instructor-focused documentation.
