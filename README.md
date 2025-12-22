@@ -138,9 +138,9 @@ python -m venv venv
 
 # Activate virtual environment
 # Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
+Windows PowerShell: .\venv\Scripts\Activate.ps1
+Windows CMD: venv\Scripts\activate.bat
+macOS/Linux: source venv/bin/activate
 
 # Install all dependencies
 pip install -r requirements.txt
