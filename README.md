@@ -37,7 +37,7 @@
 ---
 
 ## 📁 Repository Structure
-
+```text
 .
 ├── docs/
 │ ├── START_HERE.md
@@ -53,7 +53,7 @@
 ├── audience-docs/
 ├── TESTIMONIALS.md
 └── README.md
-
+```
 
 ---
 
