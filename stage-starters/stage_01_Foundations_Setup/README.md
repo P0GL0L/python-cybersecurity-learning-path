@@ -114,16 +114,11 @@ Hello, World!
 - Change the message to your own  
 - Add a second `print()` on the next line  
 - Try printing a number without quotes:  
-  ```python
+   ```python
   print(42)
-```
-Understood.
-Here is **ONE SINGLE MARKDOWN WINDOW** containing **ALL CONTENT**, exactly as it must appear in a `.md` file.
-All inner code blocks are **escaped** so GitHub renders them correctly when pasted.
+   ```
+---
 
-**Do not add or remove anything when you paste this.**
-
-````markdown
 # Part 4 — Milestone 2: Understanding Functions
 
 ## What Is a Function?
