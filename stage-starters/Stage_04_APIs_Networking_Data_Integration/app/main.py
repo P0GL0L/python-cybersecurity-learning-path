@@ -1,10 +1,18 @@
-"""Stage 4 - APIs, Networking Concepts, and Data Integration.
 
-Implements a production-style CLI that:
+---
+
+## `main.py`
+
+```python
+#!/usr/bin/env python3
+"""
+Stage 04 — APIs, Networking Concepts, and Data Integration
+
+Implements a production-style CLI toolkit that:
 - Fetches data from public APIs (weather, currency)
-- Uses timeouts and robust error handling on all network calls
-- Caches responses to disk with TTL
-- Integrates API data with a local JSON file
+- Uses timeouts + robust error handling on all network calls
+- Caches responses to disk with TTL (time-to-live)
+- Integrates API data with a local JSON file into a merged report
 
 Standard library only (urllib). No API keys required by default.
 """
@@ -13,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -27,13 +36,31 @@ from typing import Any, Dict, Optional, Tuple
 # Paths / Defaults
 # -----------------------------
 
-APP_DIR = Path(__file__).resolve().parent
-STAGE_DIR = APP_DIR.parent  # stage_04/
+def resolve_stage_dir() -> Path:
+    """
+    Supports two common placements:
+      A) main.py in stage folder root: <stage>/main.py
+      B) main.py in app folder: <stage>/app/main.py
+    """
+    here = Path(__file__).resolve().parent
+    if (here / "data").exists():
+        return here
+    if (here.parent / "data").exists():
+        return here.parent
+    return here
+
+
+STAGE_DIR = resolve_stage_dir()
 DATA_DIR = STAGE_DIR / "data"
 CACHE_DIR = STAGE_DIR / ".cache"
 
 DEFAULT_TIMEOUT_SECS = 10
 DEFAULT_CACHE_TTL_SECS = 900  # 15 minutes
+
+
+# Optional environment overrides (no secrets required in this stage)
+ENV_TIMEOUT = "STAGE4_TIMEOUT"
+ENV_CACHE_TTL = "STAGE4_CACHE_TTL"
 
 
 # -----------------------------
@@ -86,21 +113,31 @@ def write_json(path: Path, payload: Any) -> None:
 
 
 def http_get_json(url: str, *, timeout: int) -> Any:
-    """GET JSON from URL with timeout + safe error handling."""
+    """
+    GET JSON from URL with timeout + safe error handling.
+
+    Notes:
+    - Always set a timeout (prevents hangs).
+    - Use a descriptive User-Agent (good practice).
+    """
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "python-cybersecurity-learning-path-stage-4/1.0",
+            "User-Agent": "python-cybersecurity-learning-path-stage-04/1.0",
             "Accept": "application/json",
         },
         method="GET",
     )
+
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             status = getattr(resp, "status", 200)
             raw = resp.read()
+    except urllib.error.HTTPError as exc:
+        # HTTPError is also a response object, but we treat it as a failure mode here.
+        raise APIError(f"HTTP error from API: {exc.code} {exc.reason}") from exc
     except urllib.error.URLError as exc:
-        raise NetworkError(f"Network error while calling API: {exc}") from exc
+        raise NetworkError(f"Network error while calling API: {exc.reason}") from exc
     except TimeoutError as exc:
         raise NetworkError("Network timeout while calling API") from exc
 
@@ -114,7 +151,7 @@ def http_get_json(url: str, *, timeout: int) -> Any:
 
 
 # -----------------------------
-# Cache
+# Cache (file-based TTL)
 # -----------------------------
 
 @dataclass
@@ -125,6 +162,7 @@ class CacheResult:
 
 
 def cache_key_to_path(key: str) -> Path:
+    # URL-encode to keep filenames safe
     safe = urllib.parse.quote(key, safe="")
     return CACHE_DIR / f"{safe}.json"
 
@@ -132,6 +170,7 @@ def cache_key_to_path(key: str) -> Path:
 def cache_get(key: str, *, ttl: int) -> Tuple[CacheResult, Optional[Any]]:
     safe_mkdir(CACHE_DIR)
     path = cache_key_to_path(key)
+
     if not path.exists():
         return CacheResult(hit=False, path=path), None
 
@@ -143,6 +182,7 @@ def cache_get(key: str, *, ttl: int) -> Tuple[CacheResult, Optional[Any]]:
         return CacheResult(hit=False, path=path), None
 
     if ttl <= 0:
+        # TTL=0 means "always refresh"
         return CacheResult(hit=False, path=path, age_seconds=age), None
 
     if age <= ttl:
@@ -162,12 +202,10 @@ def cache_set(key: str, data: Any) -> Path:
 def cache_status() -> Dict[str, Any]:
     safe_mkdir(CACHE_DIR)
     files = sorted(CACHE_DIR.glob("*.json"))
-    total = 0
     newest = None
     oldest = None
 
     for f in files:
-        total += 1
         try:
             payload = read_json(f)
             ts = int(payload.get("_cached_at", 0))
@@ -178,7 +216,7 @@ def cache_status() -> Dict[str, Any]:
 
     return {
         "cache_dir": str(CACHE_DIR),
-        "entries": total,
+        "entries": len(files),
         "newest_cached_at": newest,
         "oldest_cached_at": oldest,
     }
@@ -198,12 +236,14 @@ def cache_clear() -> int:
 
 
 # -----------------------------
-# Geocoding / API Clients
+# Geocoding + API Clients
 # -----------------------------
 
 def parse_latlon(text: str) -> Optional[Tuple[float, float]]:
     """
-    Accepts: "47.6062,-122.3321" or "47.6062 -122.3321"
+    Accepts:
+      - "47.6062,-122.3321"
+      - "47.6062 -122.3321"
     """
     s = text.strip()
     if "," in s:
@@ -220,7 +260,6 @@ def parse_latlon(text: str) -> Optional[Tuple[float, float]]:
     except ValueError:
         return None
 
-    # Basic sanity bounds
     if not (-90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0):
         return None
     return lat, lon
@@ -228,12 +267,12 @@ def parse_latlon(text: str) -> Optional[Tuple[float, float]]:
 
 def geocode_city_open_meteo(city: str, *, timeout: int) -> Optional[Tuple[float, float, str]]:
     """
-    Primary geocoder: Open-Meteo geocoding endpoint.
-    Returns None if no results.
+    Open-Meteo geocoding endpoint. Returns (lat, lon, display) or None if no result.
     """
     q = urllib.parse.urlencode({"name": city, "count": 1, "language": "en", "format": "json"})
     url = f"https://geocoding-api.open-meteo.com/v1/search?{q}"
     data = http_get_json(url, timeout=timeout)
+
     results = data.get("results") or []
     if not results:
         return None
@@ -249,91 +288,16 @@ def geocode_city_open_meteo(city: str, *, timeout: int) -> Optional[Tuple[float,
         parts.append(admin1)
     if country:
         parts.append(country)
-    display = ", ".join(parts)
-    return lat, lon, display
-
-
-def geocode_city_nominatim(city: str, *, timeout: int) -> Optional[Tuple[float, float, str]]:
-    """
-    Fallback geocoder: OpenStreetMap Nominatim.
-    Returns None if no results.
-    """
-    q = urllib.parse.urlencode({"q": city, "format": "json", "limit": 1})
-    url = f"https://nominatim.openstreetmap.org/search?{q}"
-
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": "python-cybersecurity-learning-path-stage-4/1.0 (educational)",
-            "Accept": "application/json",
-        },
-        method="GET",
-    )
-
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            status = getattr(resp, "status", 200)
-            raw = resp.read()
-    except urllib.error.URLError as exc:
-        raise NetworkError(f"Network error while calling Nominatim: {exc}") from exc
-    except TimeoutError as exc:
-        raise NetworkError("Network timeout while calling Nominatim") from exc
-
-    if status != 200:
-        raise APIError(f"Nominatim returned non-200 status: {status}")
-
-    try:
-        results = json.loads(raw.decode("utf-8"))
-    except Exception as exc:  # noqa: BLE001
-        raise APIError("Nominatim returned invalid JSON") from exc
-
-    if not results:
-        return None
-
-    r0 = results[0]
-    lat = float(r0["lat"])
-    lon = float(r0["lon"])
-    display = r0.get("display_name", city)
-    return lat, lon, display
-
-
-def normalize_us_location(raw: str) -> str:
-    """
-    Converts 'Seattle,WA' -> 'Seattle, Washington'
-    If not recognized, returns input untouched (or lightly normalized).
-    """
-    us_states = {
-        "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California",
-        "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia",
-        "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
-        "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland",
-        "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi",
-        "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire",
-        "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina",
-        "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania",
-        "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee",
-        "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington",
-        "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming", "DC": "District of Columbia",
-    }
-    s = raw.strip()
-    if "," not in s:
-        return s
-
-    left, right = [p.strip() for p in s.split(",", 1)]
-    st = right.upper()
-    if st in us_states:
-        return f"{left}, {us_states[st]}"
-    return f"{left} {right}".strip()
+    return lat, lon, ", ".join(parts)
 
 
 def geocode_location(location: str, *, timeout: int) -> Tuple[float, float, str]:
     """
-    Resolve a location string into lat/lon/display.
+    Resolve location -> (lat, lon, display).
 
     Supports:
       - direct lat/lon: "47.6062,-122.3321"
       - place name via Open-Meteo geocoder
-      - fallback to Nominatim if Open-Meteo returns empty results
     """
     raw = location.strip()
 
@@ -342,35 +306,22 @@ def geocode_location(location: str, *, timeout: int) -> Tuple[float, float, str]
         lat, lon = direct
         return lat, lon, f"{lat},{lon}"
 
-    # Try Open-Meteo geocoder (raw)
     res = geocode_city_open_meteo(raw, timeout=timeout)
     if res:
         return res
 
-    # Try Open-Meteo with a US normalization attempt
-    normalized = normalize_us_location(raw)
-    if normalized != raw:
-        res = geocode_city_open_meteo(normalized, timeout=timeout)
-        if res:
-            return res
-
-    # Fallback to Nominatim (raw then normalized)
-    res = geocode_city_nominatim(raw, timeout=timeout)
-    if res:
-        return res
-
-    if normalized != raw:
-        res = geocode_city_nominatim(normalized, timeout=timeout)
-        if res:
-            return res
-
     raise APIError(
         f"No geocoding results for location: {raw!r}. "
-        f"Try 'Seattle', 'Seattle WA', 'Seattle, Washington', or provide lat/lon like '47.6062,-122.3321'."
+        "Try 'Seattle', 'Seattle,WA', or provide lat/lon like '47.6062,-122.3321'."
     )
 
 
 def fetch_weather(location: str, *, timeout: int) -> Dict[str, Any]:
+    """
+    Weather via Open-Meteo (no API key).
+    - Geocodes location to lat/lon
+    - Fetches current: temperature, humidity, wind
+    """
     lat, lon, display = geocode_location(location, timeout=timeout)
 
     q = urllib.parse.urlencode(
@@ -403,7 +354,6 @@ def fetch_weather(location: str, *, timeout: int) -> Dict[str, Any]:
 def fetch_currency(base: str, symbols: str, *, timeout: int) -> Dict[str, Any]:
     """
     Currency rates via Frankfurter (ECB reference rates, no API key).
-
     Example:
       https://api.frankfurter.app/latest?from=USD&to=EUR,JPY
     """
@@ -417,10 +367,10 @@ def fetch_currency(base: str, symbols: str, *, timeout: int) -> Dict[str, Any]:
     url = f"https://api.frankfurter.app/latest?{q}"
 
     data = http_get_json(url, timeout=timeout)
-
     rates = data.get("rates")
+
     if not isinstance(rates, dict) or not rates:
-        raise APIError("Currency API response missing 'rates'.")
+        raise APIError("Currency API response missing or empty 'rates'.")
 
     return {
         "source": "currency",
@@ -429,8 +379,6 @@ def fetch_currency(base: str, symbols: str, *, timeout: int) -> Dict[str, Any]:
         "date": data.get("date"),
         "rates": rates,
     }
-
-
 
 
 # -----------------------------
@@ -474,12 +422,12 @@ def cmd_fetch(args: argparse.Namespace) -> int:
         if not args.location:
             eprint("ERROR: weather fetch requires --location.")
             return 2
-        key = f"weather|loc={args.location}"
+        cache_key = f"weather|loc={args.location}"
     else:
-        key = f"currency|base={args.base}|symbols={args.symbols}"
+        cache_key = f"currency|base={args.base}|symbols={args.symbols}"
 
     if not args.no_cache:
-        meta, cached = cache_get(key, ttl=ttl)
+        meta, cached = cache_get(cache_key, ttl=ttl)
         if meta.hit and cached is not None:
             if args.json:
                 print(json.dumps(cached, indent=2, ensure_ascii=False))
@@ -496,7 +444,7 @@ def cmd_fetch(args: argparse.Namespace) -> int:
         eprint(f"ERROR: {exc}")
         return 2
 
-    cache_set(key, data)
+    cache_set(cache_key, data)
 
     if args.json:
         print(json.dumps(data, indent=2, ensure_ascii=False))
@@ -511,7 +459,7 @@ def cmd_integrate(args: argparse.Namespace) -> int:
     ttl = clamp_int(args.cache_ttl, 0, 24 * 60 * 60)
 
     input_path = Path(args.input)
-    out_path = Path(args.output)
+    output_path = Path(args.output)
 
     try:
         local = read_json(input_path)
@@ -521,23 +469,15 @@ def cmd_integrate(args: argparse.Namespace) -> int:
 
     try:
         if args.source == "currency":
-            api_key = f"currency|base={args.base}|symbols={args.symbols}"
-            cached = None
-            if not args.no_cache:
-                _, cached = cache_get(api_key, ttl=ttl)
-            if cached is None:
-                cached = fetch_currency(args.base, args.symbols, timeout=timeout)
-                cache_set(api_key, cached)
-            api_data = cached
+            key = f"currency|base={args.base}|symbols={args.symbols}"
+            meta, cached = cache_get(key, ttl=ttl) if not args.no_cache else (CacheResult(False, Path()), None)
+            api_data = cached if cached is not None else fetch_currency(args.base, args.symbols, timeout=timeout)
+            cache_set(key, api_data)
         else:
-            api_key = f"weather|loc={args.location}"
-            cached = None
-            if not args.no_cache:
-                _, cached = cache_get(api_key, ttl=ttl)
-            if cached is None:
-                cached = fetch_weather(args.location, timeout=timeout)
-                cache_set(api_key, cached)
-            api_data = cached
+            key = f"weather|loc={args.location}"
+            meta, cached = cache_get(key, ttl=ttl) if not args.no_cache else (CacheResult(False, Path()), None)
+            api_data = cached if cached is not None else fetch_weather(args.location, timeout=timeout)
+            cache_set(key, api_data)
     except (NetworkError, APIError, DataError) as exc:
         eprint(f"ERROR: {exc}")
         return 2
@@ -550,12 +490,12 @@ def cmd_integrate(args: argparse.Namespace) -> int:
     }
 
     try:
-        write_json(out_path, merged)
+        write_json(output_path, merged)
     except Exception as exc:  # noqa: BLE001
-        eprint(f"ERROR: Failed writing output file: {out_path} ({exc})")
+        eprint(f"ERROR: Failed writing output file: {output_path} ({exc})")
         return 2
 
-    print(f"Wrote integrated report: {out_path}")
+    print(f"Wrote integrated report: {output_path}")
     return 0
 
 
@@ -574,28 +514,35 @@ def cmd_cache_clear(_: argparse.Namespace) -> int:
 # CLI
 # -----------------------------
 
+def env_int(name: str, default: int) -> int:
+    v = os.environ.get(name)
+    if v is None or not v.strip():
+        return default
+    try:
+        return int(v.strip())
+    except ValueError:
+        return default
+
+
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(
-        description="Stage 4 - APIs, Networking Concepts, and Data Integration"
-    )
+    # env defaults (safe, optional)
+    env_timeout = env_int(ENV_TIMEOUT, DEFAULT_TIMEOUT_SECS)
+    env_ttl = env_int(ENV_CACHE_TTL, DEFAULT_CACHE_TTL_SECS)
+
+    p = argparse.ArgumentParser(description="Stage 04 - APIs, Networking Concepts, and Data Integration")
     sub = p.add_subparsers(dest="command", required=True)
 
     # fetch
     fetch = sub.add_parser("fetch", help="Fetch API data and print a report")
-    fetch.add_argument(
-        "--source",
-        choices=["weather", "currency"],
-        required=True,
-        help="API source to query",
-    )
-    fetch.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT_SECS, help="HTTP timeout (seconds)")
-    fetch.add_argument("--cache-ttl", type=int, default=DEFAULT_CACHE_TTL_SECS, help="Cache TTL (seconds)")
+    fetch.add_argument("--source", choices=["weather", "currency"], required=True, help="API source to query")
+    fetch.add_argument("--timeout", type=int, default=env_timeout, help="HTTP timeout (seconds)")
+    fetch.add_argument("--cache-ttl", type=int, default=env_ttl, help="Cache TTL (seconds)")
     fetch.add_argument("--no-cache", action="store_true", help="Ignore cache and force refresh")
     fetch.add_argument("--json", action="store_true", help="Output raw JSON instead of a formatted report")
 
-    fetch.add_argument("--location", default="", help="Location string (weather), e.g., 'Seattle,WA' or '47.6062,-122.3321'")
-    fetch.add_argument("--base", default="USD", help="Base currency (currency), e.g., USD")
-    fetch.add_argument("--symbols", default="EUR,JPY", help="Comma-separated symbols (currency), e.g., EUR,JPY")
+    fetch.add_argument("--location", default="", help="Weather location, e.g., 'Seattle,WA' or '47.6062,-122.3321'")
+    fetch.add_argument("--base", default="USD", help="Currency base, e.g., USD")
+    fetch.add_argument("--symbols", default="EUR,JPY", help="Currency symbols, comma-separated, e.g., EUR,JPY")
 
     fetch.set_defaults(func=cmd_fetch)
 
@@ -603,19 +550,14 @@ def build_parser() -> argparse.ArgumentParser:
     integ = sub.add_parser("integrate", help="Merge API output with local JSON data")
     integ.add_argument("--input", required=True, help="Path to local JSON input (e.g., data/sample.json)")
     integ.add_argument("--output", required=True, help="Path to write merged output JSON (e.g., report.json)")
-    integ.add_argument(
-        "--source",
-        choices=["weather", "currency"],
-        default="weather",
-        help="API source to include in the merged output",
-    )
-    integ.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT_SECS, help="HTTP timeout (seconds)")
-    integ.add_argument("--cache-ttl", type=int, default=DEFAULT_CACHE_TTL_SECS, help="Cache TTL (seconds)")
+    integ.add_argument("--source", choices=["weather", "currency"], default="weather", help="API source to include")
+    integ.add_argument("--timeout", type=int, default=env_timeout, help="HTTP timeout (seconds)")
+    integ.add_argument("--cache-ttl", type=int, default=env_ttl, help="Cache TTL (seconds)")
     integ.add_argument("--no-cache", action="store_true", help="Ignore cache and force refresh")
 
-    integ.add_argument("--location", default="Seattle,WA", help="Location string (weather), or lat/lon like '47.6062,-122.3321'")
-    integ.add_argument("--base", default="USD", help="Base currency (currency), e.g., USD")
-    integ.add_argument("--symbols", default="EUR,JPY", help="Comma-separated symbols (currency), e.g., EUR,JPY")
+    integ.add_argument("--location", default="Seattle,WA", help="Weather location (or lat/lon)")
+    integ.add_argument("--base", default="USD", help="Currency base, e.g., USD")
+    integ.add_argument("--symbols", default="EUR,JPY", help="Currency symbols, e.g., EUR,JPY")
 
     integ.set_defaults(func=cmd_integrate)
 
@@ -632,7 +574,7 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: Optional[list[str]] = None) -> int:
     args = build_parser().parse_args(argv)
     func = getattr(args, "func", None)
     if func is None:
