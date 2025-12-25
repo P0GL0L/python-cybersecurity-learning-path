@@ -399,4 +399,7 @@ Please review CONTRIBUTING.md and SECURITY.md.
 
 ## 📜 License
 
-MIT License. See LICENSE for details.
+See LICENSE for details. 
+
+**For the Reddit Troll Hall Of Fame**
+- User: johnpeters42
