@@ -1,302 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Comprehensive Python for Cybersecurity Learning Path - From fundamentals to professional security automation">
-    <meta name="keywords" content="python, cybersecurity, ethical hacking, penetration testing, security automation, learning path">
-    <title>Python for Cybersecurity - Complete Learning Path</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            color: white;
-            padding: 3rem 0;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .subtitle {
-            font-size: 1.3rem;
-            opacity: 0.95;
-        }
-        
-        .content-card {
-            background: white;
-            border-radius: 10px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .stage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .stage-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .stage-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-        
-        .stage-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stage-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-        
-        .stage-description {
-            font-size: 0.95rem;
-            color: #666;
-        }
-        
-        .cta-section {
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .cta-button:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
-        }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .feature {
-            text-align: center;
-            padding: 1.5rem;
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #667eea;
-        }
-        
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin: 2rem 0;
-            padding: 2rem;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border-radius: 8px;
-        }
-        
-        .stat {
-            text-align: center;
-            padding: 1rem;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .stat-label {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-        
-        footer {
-            text-align: center;
-            color: white;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            .subtitle {
-                font-size: 1rem;
-            }
-            .content-card {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Python for Cybersecurity learning path — beginner-first, security-focused progression from fundamentals to a production-grade capstone project.">
+  <title>Python for Cybersecurity | Structured Learning Path</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      color: #fff;
+      padding: 3rem 0;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .content-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 2.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature {
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #667eea;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+      border-radius: 8px;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .stat-number {
+      font-size: 2.3rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .stage-card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stage-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .stage-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+
+    .stage-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .stage-description {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .build-list {
+      list-style-position: inside;
+      line-height: 2;
+      margin-top: 1rem;
+    }
+
+    .cta-section {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #667eea;
+      color: #fff;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .cta-button:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+    }
+
+    footer {
+      text-align: center;
+      color: #fff;
+      padding: 2rem 0;
+      margin-top: 3rem;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      .content-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>🐍 Python for Cybersecurity</h1>
-            <p class="subtitle">A comprehensive, structured learning path from fundamentals to professional security automation</p>
-        </header>
+  <div class="container">
 
-        <div class="content-card">
-            <h2>Why This Learning Path?</h2>
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-title">Structured Progression</div>
-                    <p>Carefully designed stages that build upon each other</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>
-                    <div class="feature-title">Security-First</div>
-                    <p>Security principles integrated from day one</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">💼</div>
-                    <div class="feature-title">Career-Aligned</div>
-                    <p>Based on NICE Cybersecurity Workforce Framework</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🛠️</div>
-                    <div class="feature-title">Hands-On</div>
-                    <p>Practical exercises and real-world projects</p>
-                </div>
-            </div>
+    <header>
+      <h1>Python for Cybersecurity</h1>
+      <p class="subtitle">
+        A structured, beginner-first learning path that takes you from zero Python experience to building
+        production-ready security automation and a full capstone project.
+      </p>
+    </header>
+
+    <div class="content-card">
+      <h2>Why This Learning Path Exists</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Intentional Progression</div>
+          <p>Each stage builds deliberately on the last, with no assumed prior programming experience.</p>
         </div>
-
-        <div class="content-card">
-            <h2>Learning Path Overview</h2>
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Comprehensive Stages</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">200+</div>
-                    <div class="stat-label">Hours of Content</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">30+</div>
-                    <div class="stat-label">Practical Projects</div>
-                </div>
-            </div>
-
-            <div class="stage-grid">
-                <div class="stage-card">
-                    <div class="stage-number">01</div>
-                    <div class="stage-title">Python Fundamentals</div>
-                    <div class="stage-description">Master core Python concepts with security awareness built-in from the start</div>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-number">02</div>
-                    <div class="stage-title">Intermediate Python</div>
-                    <div class="stage-description">Advanced data structures, OOP, and error handling for robust security tools</div>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-number">03</div>
-                    <div class="stage-title">Security Fundamentals</div>
-                    <div class="stage-description">Essential cybersecurity concepts, cryptography, and security principles</div>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-number">04</div>
-                    <div class="stage-title">Network Security</div>
-                    <div class="stage-description">Network protocols, packet analysis, and network security automation</div>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-number">05</div>
-                    <div class="stage-title">Web Security</div>
-                    <div class="stage-description">Web vulnerabilities, OWASP Top 10, and automated security testing</div>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-number">06</div>
-                    <div class="stage-title">Advanced Security</div>
-                    <div class="stage-description">Malware analysis, threat intelligence, and advanced security automation</div>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-number">07</div>
-                    <div class="stage-title">Capstone Project</div>
-                    <div class="stage-description">Build a comprehensive security automation platform from scratch</div>
-                </div>
-            </div>
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-title">Security-First Mindset</div>
+          <p>Defensive coding, safe defaults, and operational thinking are reinforced throughout.</p>
         </div>
-
-        <div class="content-card">
-            <h2>What You'll Build</h2>
-            <ul style="list-style-position: inside; line-height: 2;">
-                <li>🔍 Network vulnerability scanners</li>
-                <li>🛡️ Automated security testing tools</li>
-                <li>📊 Log analysis and SIEM integrations</li>
-                <li>🔐 Password auditing utilities</li>
-                <li>🌐 Web application security scanners</li>
-                <li>🚨 Intrusion detection systems</li>
-                <li>📈 Security metrics dashboards</li>
-                <li>🤖 Threat intelligence automation</li>
-            </ul>
+        <div class="feature">
+          <div class="feature-icon">🧪</div>
+          <div class="feature-title">Production Practices</div>
+          <p>Testing, packaging, documentation, and CI are treated as core skills, not afterthoughts.</p>
         </div>
- 
-        <div class="cta-section">
-            <a href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main" class="cta-button">Start Learning on GitHub →</a>
+        <div class="feature">
+          <div class="feature-icon">💼</div>
+          <div class="feature-title">Career-Aligned</div>
+          <p>Designed to mirror real security engineering workflows and expectations.</p>
         </div>
-
-        <footer>
-            <p>Open Source • MIT Licensed • Community Driven</p>
-            <p style="margin-top: 1rem;">Built with ❤️ for the cybersecurity community</p>
-        </footer>
+      </div>
     </div>
+
+    <div class="content-card">
+      <h2>Learning Path Overview</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Structured Stages</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">Beginner-First</div>
+          <div class="stat-label">No Prior Coding Required</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">Hands-On</div>
+          <div class="stat-label">Projects, Tests, Packaging, CI</div>
+        </div>
+      </div>
+
+      <div class="stage-grid">
+        <div class="stage-card">
+          <div class="stage-number">01</div>
+          <div class="stage-title">Foundations & Setup</div>
+          <div class="stage-description">
+            Environment setup, Python fundamentals, and security-conscious habits from day one.
+          </div>
+        </div>
+
+        <div class="stage-card">
+          <div class="stage-number">02</div>
+          <div class="stage-title">Functions & Data Structures</div>
+          <div class="stage-description">
+            Core programming fluency: functions, control flow, lists, dictionaries, and defensive input handling.
+          </div>
+        </div>
+
+        <div class="stage-card">
+          <div class="stage-number">03</div>
+          <div class="stage-title">Files, Automation & CLI</div>
+          <div class="stage-description">
+            Build practical automation tools using file I/O, argparse-based CLIs, and structured logging.
+          </div>
+        </div>
+
+        <div class="stage-card">
+          <div class="stage-number">04</div>
+          <div class="stage-title">APIs, Networking & Data</div>
+          <div class="stage-description">
+            Work with HTTP APIs, network-aware scripts, data formats, and resilient error handling.
+          </div>
+        </div>
+
+        <div class="stage-card">
+          <div class="stage-number">05</div>
+          <div class="stage-title">Testing, Packaging & CI</div>
+          <div class="stage-description">
+            Write tests with pytest, package Python projects, and automate quality gates with GitHub Actions.
+          </div>
+        </div>
+
+        <div class="stage-card">
+          <div class="stage-number">06</div>
+          <div class="stage-title">Capstone Project: SecureSIEM</div>
+          <div class="stage-description">
+            A production-style capstone: parse logs, detect suspicious activity, enrich data, and generate reports.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h2>What You Will Build</h2>
+      <ul class="build-list">
+        <li>Command-line security tools with safe defaults and clear interfaces</li>
+        <li>Automation scripts for parsing files and transforming structured data</li>
+        <li>API-driven enrichment workflows with caching and error handling</li>
+        <li>Log parsing and detection engines (SecureSIEM capstone)</li>
+        <li>Actionable security reports (JSON, CSV, Markdown)</li>
+        <li>Comprehensive test suites using pytest and mocks</li>
+        <li>Installable Python packages with console entry points</li>
+        <li>CI pipelines enforcing testing and code quality standards</li>
+      </ul>
+    </div>
+
+    <div class="cta-section">
+      <a href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main"
+         class="cta-button"
+         target="_blank"
+         rel="noopener noreferrer">
+        Start Learning on GitHub →
+      </a>
+    </div>
+
+    <footer>
+      <p>Open Source • MIT Licensed • Community Driven</p>
+      <p style="margin-top: 0.5rem;">Built for learners who want real, production-grade skills</p>
+    </footer>
+
+  </div>
 </body>
 </html>
