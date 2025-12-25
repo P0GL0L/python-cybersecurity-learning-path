@@ -60,3 +60,10 @@ ruff_cache/
 # Generated reports / data
 *.json
 stage-starters/**/data/
+
+*.egg-info/
+dist/
+build/
+__pycache__/
+.pytest_cache/
+

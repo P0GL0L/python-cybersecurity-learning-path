@@ -1,7 +1,12 @@
-"""Stage 5 - Testing, Packaging, CI, and Documentation.
+"""
+Stage 05 - Testing, Packaging, CI, and Documentation.
 
-Carries forward the Stage 4 production-style CLI implementation (unchanged behavior/layout),
-so Stage 5 can focus on unit testing, packaging, CI, and documentation.
+Stage 05 carries forward the production-style CLI behavior from Stage 04 so we can focus on:
+- writing unit tests (pytest)
+- mocking external dependencies (network, filesystem, time)
+- packaging with pyproject.toml
+- CI with GitHub Actions
+- professional documentation
 
 Implements a production-style CLI that:
 - Fetches data from public APIs (weather, currency)
@@ -31,7 +36,7 @@ from typing import Any, Dict, Optional, Tuple
 # -----------------------------
 
 APP_DIR = Path(__file__).resolve().parent
-STAGE_DIR = APP_DIR.parent  # stage_05/
+STAGE_DIR = APP_DIR.parent  # Stage_05_Testing_Packaging_CI_Documentation/
 DATA_DIR = STAGE_DIR / "data"
 CACHE_DIR = STAGE_DIR / ".cache"
 
@@ -93,7 +98,7 @@ def http_get_json(url: str, *, timeout: int) -> Any:
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "python-cybersecurity-learning-path-stage-4/1.0",
+            "User-Agent": "python-cybersecurity-learning-path-stage-05/1.0",
             "Accept": "application/json",
         },
         method="GET",
@@ -256,50 +261,6 @@ def geocode_city_open_meteo(city: str, *, timeout: int) -> Optional[Tuple[float,
     return lat, lon, display
 
 
-def geocode_city_nominatim(city: str, *, timeout: int) -> Optional[Tuple[float, float, str]]:
-    """
-    Fallback geocoder: OpenStreetMap Nominatim.
-    Returns None if no results.
-    """
-    q = urllib.parse.urlencode({"q": city, "format": "json", "limit": 1})
-    url = f"https://nominatim.openstreetmap.org/search?{q}"
-
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": "python-cybersecurity-learning-path-stage-4/1.0 (educational)",
-            "Accept": "application/json",
-        },
-        method="GET",
-    )
-
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            status = getattr(resp, "status", 200)
-            raw = resp.read()
-    except urllib.error.URLError as exc:
-        raise NetworkError(f"Network error while calling Nominatim: {exc}") from exc
-    except TimeoutError as exc:
-        raise NetworkError("Network timeout while calling Nominatim") from exc
-
-    if status != 200:
-        raise APIError(f"Nominatim returned non-200 status: {status}")
-
-    try:
-        results = json.loads(raw.decode("utf-8"))
-    except Exception as exc:  # noqa: BLE001
-        raise APIError("Nominatim returned invalid JSON") from exc
-
-    if not results:
-        return None
-
-    r0 = results[0]
-    lat = float(r0["lat"])
-    lon = float(r0["lon"])
-    display = r0.get("display_name", city)
-    return lat, lon, display
-
-
 def normalize_us_location(raw: str) -> str:
     """
     Converts 'Seattle,WA' -> 'Seattle, Washington'
@@ -336,7 +297,6 @@ def geocode_location(location: str, *, timeout: int) -> Tuple[float, float, str]
     Supports:
       - direct lat/lon: "47.6062,-122.3321"
       - place name via Open-Meteo geocoder
-      - fallback to Nominatim if Open-Meteo returns empty results
     """
     raw = location.strip()
 
@@ -345,31 +305,21 @@ def geocode_location(location: str, *, timeout: int) -> Tuple[float, float, str]
         lat, lon = direct
         return lat, lon, f"{lat},{lon}"
 
-    # Try Open-Meteo geocoder (raw)
+    # Open-Meteo geocoder (raw)
     res = geocode_city_open_meteo(raw, timeout=timeout)
     if res:
         return res
 
-    # Try Open-Meteo with a US normalization attempt
+    # Try a US normalization attempt
     normalized = normalize_us_location(raw)
     if normalized != raw:
         res = geocode_city_open_meteo(normalized, timeout=timeout)
         if res:
             return res
 
-    # Fallback to Nominatim (raw then normalized)
-    res = geocode_city_nominatim(raw, timeout=timeout)
-    if res:
-        return res
-
-    if normalized != raw:
-        res = geocode_city_nominatim(normalized, timeout=timeout)
-        if res:
-            return res
-
     raise APIError(
         f"No geocoding results for location: {raw!r}. "
-        f"Try 'Seattle', 'Seattle WA', 'Seattle, Washington', or provide lat/lon like '47.6062,-122.3321'."
+        f"Try 'Seattle', 'Seattle,WA', 'Seattle, Washington', or provide lat/lon like '47.6062,-122.3321'."
     )
 
 
@@ -577,7 +527,7 @@ def cmd_cache_clear(_: argparse.Namespace) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        description="Stage 4 - APIs, Networking Concepts, and Data Integration"
+        description="Stage 05 - Testing, Packaging, CI, and Documentation"
     )
     sub = p.add_subparsers(dest="command", required=True)
 
@@ -634,13 +584,24 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    
+    if argv is None:
+        import sys as _sys
+        argv = _sys.argv[1:]
+
+    parser = build_parser()
+
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit as e:
+        # argparse already printed the error/usage to stderr.
+        # Convert to an integer exit code instead of crashing tests.
+        code = e.code
+        return int(code) if isinstance(code, int) else 2
+
     func = getattr(args, "func", None)
     if func is None:
         eprint("ERROR: No command selected. Use --help.")
         return 1
+
     return int(func(args))
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

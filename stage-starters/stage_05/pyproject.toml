@@ -1,21 +1,33 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stage5_tool"
+name = "stage-05-toolkit"
 version = "0.1.0"
-description = "Stage 5 packaging example"
+description = "Stage 05: Testing, Packaging, CI, and Documentation (production-style CLI for practicing quality workflows)."
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Charles Bonetti" }]
+keywords = ["pytest", "ci", "packaging", "cli", "cybersecurity-learning"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0"]
+dev = [
+  "pytest>=7.0",
+]
 
 [project.scripts]
 stage5-tool = "app.main:main"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["app*"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-q", "--basetemp=.pytest-tmp"]
