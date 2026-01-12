@@ -1,337 +1,672 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Python for Cybersecurity learning path — beginner-first, security-focused progression from fundamentals to a production-grade capstone project.">
-  <title>Python for Cybersecurity | Structured Learning Path</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Python for Cybersecurity learning path — beginner-first, security-focused progression from fundamentals to a production-grade capstone project." />
+  <meta name="color-scheme" content="dark" />
+  <title>Python for Cybersecurity | Learning Path</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg0:#070a0f;
+      --bg1:#0b1220;
+
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.12);
+
+      --txt:#e7eefc;
+      --muted:#a8b3cf;
+
+      --green:#00ff88;
+      --cyan:#00d4ff;
+      --pink:#ff4dff;
+      --amber:#ffd166;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 16px;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--txt);
+      background:
+        radial-gradient(900px 600px at 10% 10%, rgba(0,255,136,.15), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(0,212,255,.12), transparent 60%),
+        radial-gradient(700px 500px at 60% 90%, rgba(255,77,255,.08), transparent 60%),
+        linear-gradient(135deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
     }
 
-    .container {
-      max-width: 1200px;
+    /* subtle grid overlay */
+    .grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at 50% 25%, black 0, black 45%, transparent 75%);
+    }
+
+    .wrap{
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 28px 18px 70px;
+      position: relative;
+      z-index: 1;
     }
 
-    header {
-      text-align: center;
-      color: #fff;
-      padding: 3rem 0;
+    /* top nav */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
     }
 
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
     }
 
-    .subtitle {
-      font-size: 1.25rem;
-      opacity: 0.95;
-      max-width: 900px;
-      margin: 0 auto;
+    .mark{
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,136,.35);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(0,255,136,.4), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(0,212,255,.25), transparent 60%),
+        rgba(0,0,0,.35);
+      box-shadow: 0 0 0 3px rgba(0,255,136,.08), 0 18px 45px rgba(0,255,136,.08);
     }
 
-    .content-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 2.5rem;
-      margin: 2rem 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    h2 {
-      margin-bottom: 1rem;
-      color: #333;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-top: 1.5rem;
-    }
-
-    .feature {
-      text-align: center;
-      padding: 1.5rem;
-    }
-
-    .feature-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .feature-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #667eea;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      margin: 2rem 0;
-      padding: 2rem;
-      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-      border-radius: 8px;
-    }
-
-    .stat {
-      text-align: center;
-      padding: 1rem;
-    }
-
-    .stat-number {
-      font-size: 2.3rem;
-      font-weight: bold;
-      color: #667eea;
-    }
-
-    .stat-label {
+    .brand h1{
+      margin:0;
       font-size: 1rem;
-      color: #666;
-      margin-top: 0.5rem;
+      line-height: 1.2;
+      letter-spacing: .4px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
 
-    .stage-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+    .brand .sub{
+      margin:0;
+      font-size: .85rem;
+      color: var(--muted);
+      font-family: var(--mono);
     }
 
-    .stage-card {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      padding: 1.5rem;
-      border-radius: 8px;
-      border-left: 4px solid #667eea;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .nav-actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .stage-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    a{ color: var(--cyan); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      text-decoration:none;
+      font-size: .95rem;
+      line-height: 1;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(0,255,136,.55);
+      box-shadow: 0 10px 30px rgba(0,255,136,.12);
+      background: rgba(0,0,0,.25);
+      text-decoration:none;
+    }
+    .btn.primary{
+      border-color: rgba(0,255,136,.55);
+      background: linear-gradient(90deg, rgba(0,255,136,.22), rgba(0,212,255,.18));
+      box-shadow: 0 12px 40px rgba(0,255,136,.15);
+    }
+    .btn.primary:hover{
+      border-color: rgba(0,212,255,.65);
+      box-shadow: 0 12px 45px rgba(0,212,255,.18);
+    }
+    .btn.ghost{
+      background: transparent;
+      border-color: rgba(0,212,255,.35);
+      color: var(--cyan);
+    }
+    .btn.ghost:hover{
+      background: rgba(0,212,255,.08);
+      border-color: rgba(0,212,255,.65);
     }
 
-    .stage-number {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #667eea;
-      margin-bottom: 0.5rem;
+    /* hero */
+    .hero{
+      margin-top: 20px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: stretch;
     }
 
-    .stage-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+    .panel{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      position: relative;
+      overflow:hidden;
     }
 
-    .stage-description {
-      font-size: 0.95rem;
-      color: #555;
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(500px 140px at 20% 0%, rgba(0,255,136,.18), transparent 60%),
+        radial-gradient(500px 140px at 80% 0%, rgba(0,212,255,.16), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .panel > *{ position:relative; }
+
+    .kicker{
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: .9rem;
+      margin: 0 0 10px;
+      letter-spacing: .6px;
     }
 
-    .build-list {
-      list-style-position: inside;
-      line-height: 2;
-      margin-top: 1rem;
+    .title{
+      margin: 0 0 10px;
+      font-size: 2.2rem;
+      line-height: 1.15;
+      letter-spacing: .2px;
     }
 
-    .cta-section {
-      text-align: center;
-      padding: 2rem;
+    .title .grad{
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--pink));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .cta-button {
-      display: inline-block;
-      background: #667eea;
-      color: #fff;
-      padding: 1rem 2.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    .lead{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 70ch;
     }
 
-    .cta-button:hover {
-      background: #764ba2;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+    .badges{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .badge{
+      font-family: var(--mono);
+      font-size: .83rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: #cfe3ff;
+    }
+    .badge.good{ border-color: rgba(0,255,136,.35); }
+    .badge.cyan{ border-color: rgba(0,212,255,.35); }
+    .badge.warn{ border-color: rgba(255,209,102,.35); color: #ffe9b0; }
+
+    /* terminal card */
+    .term{
+      background: #0a0f18;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      height: 100%;
+    }
+    .term-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .dots{ display:flex; gap: 7px; }
+    .dot{ width: 11px; height: 11px; border-radius: 50%; }
+    .dot.r{ background:#ff5f56; }
+    .dot.y{ background:#ffbd2e; }
+    .dot.g{ background:#27c93f; }
+
+    .term-title{
+      font-family: var(--mono);
+      font-size: .82rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
 
-    footer {
-      text-align: center;
-      color: #fff;
-      padding: 2rem 0;
-      margin-top: 3rem;
-      font-size: 0.95rem;
+    pre{
+      margin:0;
+      font-family: var(--mono);
+      font-size: .92rem;
+      line-height: 1.7;
+      color: #d9e6ff;
+      overflow:auto;
+    }
+    .p{ color: #7ee787; }
+    .c{ color: #79c0ff; }
+    .m{ color: #8b949e; }
+
+    /* sections */
+    .section{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
     }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-      .subtitle {
-        font-size: 1rem;
-      }
-      .content-card {
-        padding: 1.5rem;
-      }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 1.25rem;
+      letter-spacing: .2px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card{
+      grid-column: span 6;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card2);
+      padding: 16px 16px 14px;
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+    }
+    .card:hover{
+      border-color: rgba(0,255,136,.35);
+    }
+
+    .card h3{
+      margin:0 0 6px;
+      font-size: 1.05rem;
+    }
+    .card p{
+      margin:0 0 12px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .card .links{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+    }
+
+    .linkpill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,212,255,.28);
+      background: rgba(0,212,255,.08);
+      color: #bfefff;
+      font-family: var(--mono);
+      font-size: .85rem;
+      text-decoration:none;
+    }
+    .linkpill:hover{
+      border-color: rgba(0,212,255,.65);
+      background: rgba(0,212,255,.12);
+      text-decoration:none;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .stat{
+      grid-column: span 4;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      background: rgba(0,0,0,.22);
+    }
+    .stat .num{
+      font-family: var(--mono);
+      font-size: 1.35rem;
+      color: var(--green);
+    }
+    .stat .lbl{
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: .95rem;
+    }
+
+    .note{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    footer{
+      margin-top: 22px;
+      padding: 18px 12px 0;
+      color: #7f8aa7;
+      text-align:center;
+      font-size: .9rem;
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+    footer .mono{ font-family: var(--mono); }
+
+    /* responsive */
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+      .card{ grid-column: span 12; }
+      .stat{ grid-column: span 12; }
+      .nav-actions{ justify-content:flex-start; }
+      .title{ font-size: 1.9rem; }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
+  <div class="grid"></div>
 
-    <header>
-      <h1>Python for Cybersecurity</h1>
-      <p class="subtitle">
-        A structured, beginner-first learning path that takes you from zero Python experience to building
-        production-ready security automation and a full capstone project.
-      </p>
-    </header>
+  <div class="wrap">
 
-    <div class="content-card">
-      <h2>Why This Learning Path Exists</h2>
-      <div class="features">
-        <div class="feature">
-          <div class="feature-icon">🎯</div>
-          <div class="feature-title">Intentional Progression</div>
-          <p>Each stage builds deliberately on the last, with no assumed prior programming experience.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🔒</div>
-          <div class="feature-title">Security-First Mindset</div>
-          <p>Defensive coding, safe defaults, and operational thinking are reinforced throughout.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🧪</div>
-          <div class="feature-title">Production Practices</div>
-          <p>Testing, packaging, documentation, and CI are treated as core skills, not afterthoughts.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">💼</div>
-          <div class="feature-title">Career-Aligned</div>
-          <p>Designed to mirror real security engineering workflows and expectations.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-card">
-      <h2>Learning Path Overview</h2>
-
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-number">6</div>
-          <div class="stat-label">Structured Stages</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">Beginner-First</div>
-          <div class="stat-label">No Prior Coding Required</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">Hands-On</div>
-          <div class="stat-label">Projects, Tests, Packaging, CI</div>
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div style="min-width:0">
+          <h1>Python for Cybersecurity</h1>
+          <p class="sub">beginner-first • security-focused • production practices</p>
         </div>
       </div>
 
-      <div class="stage-grid">
-        <div class="stage-card">
-          <div class="stage-number">01</div>
-          <div class="stage-title">Foundations & Setup</div>
-          <div class="stage-description">
-            Environment setup, Python fundamentals, and security-conscious habits from day one.
-          </div>
-        </div>
-
-        <div class="stage-card">
-          <div class="stage-number">02</div>
-          <div class="stage-title">Functions & Data Structures</div>
-          <div class="stage-description">
-            Core programming fluency: functions, control flow, lists, dictionaries, and defensive input handling.
-          </div>
-        </div>
-
-        <div class="stage-card">
-          <div class="stage-number">03</div>
-          <div class="stage-title">Files, Automation & CLI</div>
-          <div class="stage-description">
-            Build practical automation tools using file I/O, argparse-based CLIs, and structured logging.
-          </div>
-        </div>
-
-        <div class="stage-card">
-          <div class="stage-number">04</div>
-          <div class="stage-title">APIs, Networking & Data</div>
-          <div class="stage-description">
-            Work with HTTP APIs, network-aware scripts, data formats, and resilient error handling.
-          </div>
-        </div>
-
-        <div class="stage-card">
-          <div class="stage-number">05</div>
-          <div class="stage-title">Testing, Packaging & CI</div>
-          <div class="stage-description">
-            Write tests with pytest, package Python projects, and automate quality gates with GitHub Actions.
-          </div>
-        </div>
-
-        <div class="stage-card">
-          <div class="stage-number">06</div>
-          <div class="stage-title">Capstone Project: SecureSIEM</div>
-          <div class="stage-description">
-            A production-style capstone: parse logs, detect suspicious activity, enrich data, and generate reports.
-          </div>
-        </div>
+      <div class="nav-actions">
+        <a class="btn primary" href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main" target="_blank" rel="noopener noreferrer">
+          View on GitHub
+        </a>
+        <a class="btn ghost" href="#stages">Stages</a>
+        <a class="btn" href="#whatyoubuild">What You Build</a>
       </div>
     </div>
 
-    <div class="content-card">
-      <h2>What You Will Build</h2>
-      <ul class="build-list">
-        <li>Command-line security tools with safe defaults and clear interfaces</li>
-        <li>Automation scripts for parsing files and transforming structured data</li>
-        <li>API-driven enrichment workflows with caching and error handling</li>
-        <li>Log parsing and detection engines (SecureSIEM capstone)</li>
-        <li>Actionable security reports (JSON, CSV, Markdown)</li>
-        <li>Comprehensive test suites using pytest and mocks</li>
-        <li>Installable Python packages with console entry points</li>
-        <li>CI pipelines enforcing testing and code quality standards</li>
-      </ul>
+    <div class="hero">
+      <section class="panel">
+        <p class="kicker">[ learner@workstation ] $ python -m path --start</p>
+
+        <h2 class="title">
+          Learn <span class="grad">Python</span> the way security teams actually use it.
+        </h2>
+
+        <p class="lead">
+          A structured, beginner-first learning path that takes you from zero Python experience to building
+          production-ready security automation and a full capstone project.
+        </p>
+
+        <div class="nav-actions" style="margin-top: 10px">
+          <a class="btn primary" href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main" target="_blank" rel="noopener noreferrer">
+            Start Learning
+          </a>
+          <a class="btn" href="#stages">Jump to Stages</a>
+          <a class="btn ghost" href="#quickstart">Quick Start</a>
+        </div>
+
+        <div class="badges">
+          <span class="badge good">✔ Beginner-first</span>
+          <span class="badge cyan">🔒 Security-first mindset</span>
+          <span class="badge warn">⚠ Defensive coding</span>
+        </div>
+
+        <div class="note">
+          Design intent: every stage includes explanation, guided practice, and a small deliverable that stacks into real capability.
+        </div>
+      </section>
+
+      <aside class="panel term" id="quickstart">
+        <div class="term-top">
+          <div class="dots" aria-hidden="true">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          </div>
+          <div class="term-title">quickstart</div>
+        </div>
+
+        <pre><span class="m"># Clone</span>
+<span class="p">$</span> <span class="c">git clone</span> https://github.com/P0GL0L/python-cybersecurity-learning-path.git
+
+<span class="m"># Enter</span>
+<span class="p">$</span> <span class="c">cd</span> python-cybersecurity-learning-path
+
+<span class="m"># Start here</span>
+<span class="p">$</span> <span class="c">type</span> docs\START_HERE.md
+
+<span class="m"># Run a stage</span>
+<span class="p">$</span> <span class="c">python</span> stage_01\main.py
+        </pre>
+      </aside>
     </div>
 
-    <div class="cta-section">
-      <a href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main"
-         class="cta-button"
-         target="_blank"
-         rel="noopener noreferrer">
-        Start Learning on GitHub →
-      </a>
-    </div>
+    <section class="section">
+      <div class="panel">
+        <h2>Why This Learning Path Exists</h2>
+
+        <div class="cards" style="margin-top:14px;">
+          <article class="card">
+            <h3>Intentional Progression</h3>
+            <p>Each stage builds deliberately on the last, with no assumed prior programming experience.</p>
+          </article>
+
+          <article class="card">
+            <h3>Security-First Mindset</h3>
+            <p>Defensive coding, safe defaults, and operational thinking are reinforced throughout.</p>
+          </article>
+
+          <article class="card">
+            <h3>Production Practices</h3>
+            <p>Testing, packaging, documentation, and CI are treated as core skills, not afterthoughts.</p>
+          </article>
+
+          <article class="card">
+            <h3>Career-Aligned</h3>
+            <p>Designed to mirror real security engineering workflows and expectations.</p>
+          </article>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="num">6</div>
+            <div class="lbl">Structured stages</div>
+          </div>
+          <div class="stat">
+            <div class="num">Beginner-first</div>
+            <div class="lbl">No prior coding required</div>
+          </div>
+          <div class="stat">
+            <div class="num">Hands-on</div>
+            <div class="lbl">Projects, tests, packaging, CI</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stages">
+      <div class="panel">
+        <h2>Learning Path Overview</h2>
+        <p style="margin:0;color:var(--muted);max-width:90ch;">
+          Stages are designed to be completed in order. Each stage should leave you with one tangible skill upgrade and a small artifact.
+        </p>
+
+        <div class="cards" style="margin-top:14px;">
+          <article class="card">
+            <h3><span class="badge good">stage_01</span> Foundations & Setup</h3>
+            <p>Environment setup, Python fundamentals, and security-conscious habits from day one.</p>
+            <div class="links">
+              <a class="linkpill" target="_blank" rel="noopener noreferrer"
+                 href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main/stage_01">
+                Open stage →
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3><span class="badge good">stage_02</span> Functions & Data Structures</h3>
+            <p>Functions, control flow, lists/dicts, and defensive input handling.</p>
+            <div class="links">
+              <a class="linkpill" target="_blank" rel="noopener noreferrer"
+                 href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main/stage_02_Functions_Data_Structures">
+                Open stage →
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3><span class="badge cyan">stage_03</span> Files, Automation & CLI</h3>
+            <p>Build automation tools using file I/O, argparse CLIs, and structured logging.</p>
+            <div class="links">
+              <a class="linkpill" target="_blank" rel="noopener noreferrer"
+                 href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main/stage_03">
+                Open stage →
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3><span class="badge cyan">stage_04</span> APIs, Networking & Data</h3>
+            <p>HTTP APIs, network-aware scripts, data formats, and resilient error handling.</p>
+            <div class="links">
+              <a class="linkpill" target="_blank" rel="noopener noreferrer"
+                 href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main/stage_04">
+                Open stage →
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3><span class="badge warn">stage_05</span> Testing, Packaging & CI</h3>
+            <p>pytest, packaging, and GitHub Actions quality gates.</p>
+            <div class="links">
+              <a class="linkpill" target="_blank" rel="noopener noreferrer"
+                 href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main/stage_05">
+                Open stage →
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3><span class="badge warn">stage_06</span> Capstone: SecureSIEM</h3>
+            <p>Parse logs, detect suspicious activity, enrich events, and generate reports.</p>
+            <div class="links">
+              <a class="linkpill" target="_blank" rel="noopener noreferrer"
+                 href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main/capstone">
+                Open capstone →
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="whatyoubuild">
+      <div class="panel">
+        <h2>What You Will Build</h2>
+        <div class="cards" style="margin-top:14px;">
+          <article class="card">
+            <h3>Command-line security tools</h3>
+            <p>Safe defaults, clear interfaces, and predictable behavior.</p>
+          </article>
+          <article class="card">
+            <h3>Automation scripts</h3>
+            <p>Parse files, transform data, and build repeatable workflows.</p>
+          </article>
+          <article class="card">
+            <h3>API-driven enrichment</h3>
+            <p>Resilient requests, caching strategy, and error-handling patterns.</p>
+          </article>
+          <article class="card">
+            <h3>SecureSIEM capstone</h3>
+            <p>Detection logic, enrichment, and reporting like a real pipeline.</p>
+          </article>
+          <article class="card">
+            <h3>Test suites</h3>
+            <p>pytest, mocks, fixtures, and confidence-building automation.</p>
+          </article>
+          <article class="card">
+            <h3>Packaging + CI</h3>
+            <p>Installable tools, entry points, and GitHub Actions gates.</p>
+          </article>
+        </div>
+
+        <div class="note">
+          If you want, I can add a progress tracker that reads stage completion from a simple checklist file so the site updates automatically.
+        </div>
+
+        <div class="nav-actions" style="margin-top:14px;">
+          <a class="btn primary" href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main" target="_blank" rel="noopener noreferrer">
+            Open Repo on GitHub
+          </a>
+          <a class="btn ghost" href="#stages">Back to Stages</a>
+        </div>
+      </div>
+    </section>
 
     <footer>
-      <p>Open Source • MIT Licensed • Community Driven</p>
-      <p style="margin-top: 0.5rem;">Built for learners who want real, production-grade skills</p>
+      <div class="mono">Built for learners who want real, production-grade skills</div>
+      <div style="margin-top:6px; opacity:.95;">
+        <a href="https://github.com/P0GL0L/python-cybersecurity-learning-path/tree/main" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span style="opacity:.5;"> • </span>
+        <a href="#quickstart">Quick Start</a>
+        <span style="opacity:.5;"> • </span>
+        <a href="#stages">Stages</a>
+        <span style="opacity:.5;"> • </span>
+        <a href="#whatyoubuild">What You Build</a>
+      </div>
     </footer>
 
   </div>
